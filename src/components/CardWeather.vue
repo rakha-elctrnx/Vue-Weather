@@ -16,14 +16,12 @@ export default {
   },
   methods: {
   getWeatherImage(cuaca) {
-    // Mengembalikan path gambar sesuai dengan cuaca
     return `<img src="../assets/${cuaca}.png">`;
   }
 }
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .card {
   width: 300px;

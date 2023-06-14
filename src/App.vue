@@ -1,25 +1,23 @@
 <template>
-  <div class="container-fluid d-flex justify-content-center align-items-center" style="height:100vh; overflow:hidden;">
+  <div class="container-fluid d-flex justify-content-center align-items-center flex-column" style="height:100vh; overflow:hidden;">
+    <div class="jam">{{ currentTime }}</div>
     <div class="row main">
       <div class="col-lg p-3 divide">
-        <div style="width: 20%;"></div>
-        <div style="width: 80%;">
           <div class="fw-bold text-white text-start">Jakarta</div>
           <div class="d-flex position-relative status-cuaca">
             <img class="berawan" alt="berawan" src="/img/berawan.png">
             <div class="status text-white px-4 ps-5 fs-1">Berawan , 31° C</div>
           </div>
           <div class="line"></div>
-          <div class="text-white text-start px-2 fs-1 fw-semibold">Keep Safe</div>
-        </div>
+          <div class="text-white text-start px-2 fs-1 fw-semibold">Keep Safe :)</div>
       </div>
 
       <div class="col-lg divides">
         <div class="d-flex justify-content-center align-items-center" style="width: 100%; height: 45px;">
-          <div class="tgl text-white">Kamis, 8 November 2021</div>
+          <div class="tgl text-white">{{ currentDate }} &nbsp; &nbsp; </div>
           <div class="line-tgl"></div>
         </div>
-        <div class="d-flex justify-content-center card-container flex-row">
+        <div class="d-flex justify-content-around card-container flex-row">
           <CardWeather :cuaca="cuaca"/>
         </div>
       </div>
@@ -35,6 +33,8 @@ export default {
     components: { CardWeather },
     data() {
       return {
+        currentTime: '',
+        currentDate: '',
         cuaca: [
           {
             kota: 'Yogyakarta',
@@ -49,6 +49,25 @@ export default {
         ]
       }
     },
+    created() {
+    this.updateTime(); // Panggil fungsi updateTime() saat komponen dibuat
+    },
+    mounted() {
+      setInterval(this.updateTime, 1000); // Perbarui jam setiap 1 detik
+    },
+    methods: {
+      updateTime() {
+        const date = new Date();
+
+        const day = date.toLocaleDateString("id-ID", { weekday: "long" });
+        const month = date.toLocaleDateString("id-ID", { month: "long" });
+        const dayOfMonth = date.getDate();
+        const year = date.getFullYear();
+
+        this.currentTime = date.toLocaleTimeString([], { hour12: false });
+        this.currentDate = `${day}, ${dayOfMonth} ${month} ${year}`;
+      }
+    }
 }
 </script>
 
@@ -86,6 +105,7 @@ export default {
 }
 .divide {
   display: flex;
+  flex-direction: column;
   width: 50%;
 }
 .divides {
@@ -96,15 +116,24 @@ export default {
 .tgl {
   font-size: 27px;
   font-weight: 300;
-  width: 50%;
 }
 .line-tgl {
   background-color: white;
   height: 3px;
-  width: 50%;
+  flex-grow: 1;
 }
 .card-container {
-  gap: 10%;
   margin-top: 10px;
+}
+.jam {
+  position: absolute;
+  top: 0;
+  left: 5%;
+  background-color: white;
+  color: #27A5F9;
+  padding: 5px 20px;
+  font-size: 25px;
+  border-radius: 0 0 10px 10px;
+  font-weight: 700;
 }
 </style>
